@@ -42,14 +42,18 @@ class TokenGenerator:
         self.corpus = corpus
 
     def generate(self, word):
-        predict_list = self.corpus[word]
+        predict_dict = self.corpus[word]
+        predict_list = []
+        for key, value in predict_dict.items():
+            temp = [key] * value
+            predict_list.extend(temp)
 
         return random.choice(predict_list)
 
 
 if __name__ == '__main__':
     sent = 'One fish two fish red fish blue fish'
-    path = 'data/東のエデン.txt'
+    path = 'data/デスノート.txt'
     with open(path, 'rt') as f:
         text = f.read()
     parser = CabochaParser()
@@ -58,14 +62,13 @@ if __name__ == '__main__':
 
     creator = CorpusCreator()
     corpus = creator.create(token_list)
-    print(corpus)
 
-    #generator = TokenGenerator(corpus)
-    #next_word = generator.generate('*START*')
-    #for i in range(100):
-    #    sys.stdout.write(next_word)
-    #    next_word = generator.generate(next_word)
-    #    if next_word == '*END*':
-    #        break
+    generator = TokenGenerator(corpus)
+    next_word = generator.generate('*START*')
+    for i in range(100):
+        sys.stdout.write(next_word)
+        next_word = generator.generate(next_word)
+        if next_word == '*END*':
+            break
 
 
