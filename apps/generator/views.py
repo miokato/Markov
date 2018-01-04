@@ -7,19 +7,11 @@ from preprosessor.parser import MessageManager, CabochaParser
 from .markov import CorpusCreator, TokenGenerator
 
 
-class IndexView(TemplateView):
-    template_name = 'generator/index.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['sent'] = self.create_sentence()
-
-        return context
-
+class SentenceMixin(object):
     @staticmethod
     def create_sentence():
         sent = str()
-        path = 'data/デスノート.txt'
+        path = 'data/フリーザ.txt'
         with open(path, 'rt') as f:
             text = f.read()
         parser = CabochaParser()
@@ -37,3 +29,14 @@ class IndexView(TemplateView):
             if next_word == '*END*':
                 break
         return sent
+
+
+class IndexView(SentenceMixin, TemplateView):
+    template_name = 'generator/index.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sent'] = self.create_sentence()
+
+        return context
+
