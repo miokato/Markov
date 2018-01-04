@@ -4,7 +4,8 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 
 from preprosessor.parser import MessageManager, CabochaParser
-from .markov import CorpusCreator, TokenGenerator
+from .corpus import CorpusCreator
+from .generator import TokenGenerator
 
 
 class SentenceMixin(object):
