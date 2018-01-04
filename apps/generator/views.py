@@ -8,36 +8,14 @@ from .corpus import CorpusCreator
 from .generator import TokenGenerator
 
 
-class SentenceMixin(object):
-    @staticmethod
-    def create_sentence():
-        sent = str()
-        path = 'data/フリーザ.txt'
-        with open(path, 'rt') as f:
-            text = f.read()
-        parser = CabochaParser()
-        manager = MessageManager(parser=parser)
-        token_list = manager.extract_message(text).bags
-
-        creator = CorpusCreator()
-        corpus = creator.create(token_list)
-
-        generator = TokenGenerator(corpus)
-        next_word = generator.generate('*START*')
-        for i in range(30):
-            sent += next_word
-            next_word = generator.generate(next_word)
-            if next_word == '*END*':
-                break
-        return sent
-
-
-class IndexView(SentenceMixin, TemplateView):
+class IndexView(TemplateView):
     template_name = 'generator/index.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['sent'] = self.create_sentence()
+        generator = TokenGenerator('eva')
+        sent = generator.generate(num_of_word=20)
+        context['sent'] = sent
 
         return context
 

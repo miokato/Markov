@@ -15,12 +15,7 @@ class CorpusCreator:
             tokens = string
         return tokens
 
-    def create_collection(self, collection, data):
-        collection = self.db[collection]
-        corpus = self.create(data)
-        collection.insert_one(corpus)
-
-    def create(self, input_data):
+    def create_corpus(self, input_data):
         corpus = {}
         tokens = self._preprocess(input_data)
         end = ['*END*']
@@ -41,5 +36,11 @@ class CorpusCreator:
                     corpus[token][tokens[i + 1]] += 1
 
         return corpus
+
+    def store_collection(self, collection, token_list):
+        collection = self.db[collection]
+        corpus = self.create_corpus(token_list)
+        for key, value in corpus.items():
+            collection.insert_one({'this': key, 'next': value})
 
 
