@@ -1,6 +1,6 @@
 import sys
 import random
-from parser import MessageManager, CabochaParser
+from preprosessor.parser import MessageManager, CabochaParser
 
 
 class CorpusCreator:
@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     generator = TokenGenerator(corpus)
     next_word = generator.generate('*START*')
-    for i in range(100):
+    for i in range(10):
         sys.stdout.write(next_word)
         next_word = generator.generate(next_word)
         if next_word == '*END*':
